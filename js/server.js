@@ -1,34 +1,22 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
+
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-let cart = [];
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname)));
 
-app.use(bodyParser.json());
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
+// Serve static files from specific directories
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
 
-// Serve static files from the html directory
-app.use(express.static(path.join(__dirname, '..')));
-
-// Define a route for the root URL
+// Serve the HTML file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'html', 'index.html'));
+    res.sendFile(path.join(__dirname, 'html', 'index.html'));
 });
 
-app.post('/add-to-cart', (req, res) => {
-    const { item } = req.body;
-    cart.push(item);
-    res.json({ message: 'Item added to cart', cartCount: cart.length });
-});
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
