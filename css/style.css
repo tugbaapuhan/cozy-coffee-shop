@@ -29,6 +29,29 @@ header h1 {
     font-size: 2.5em;
 }
 
+#cart-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+}
+
+.cart-logo {
+    width: 30px;
+    height: 30px;
+}
+
+#cart-count {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 0.8em;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
 /* Media query for smaller screens */
 @media (max-width: 600px) {
     header {
@@ -43,6 +66,21 @@ header h1 {
     header h1 {
         font-size: 1.8em;
         text-align: center;
+    }
+
+    #cart-icon {
+        top: 10px;
+        right: 10px;
+    }
+
+    .cart-logo {
+        width: 24px;
+        height: 24px;
+    }
+
+    #cart-count {
+        padding: 2px 5px;
+        font-size: 0.7em;
     }
 }
 
@@ -171,15 +209,6 @@ footer a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#cart h2 {
-    display: flex;
-    align-items: center;
-}
-
-#cart-items {
-    margin-bottom: 20px;
-}
-
 #cart-items ul {
     padding: 0;
 }
@@ -188,9 +217,8 @@ footer a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
     border-bottom: 1px solid #ccc;
+    padding: 10px 0;
 }
 
 #cart-items .item-details {
@@ -198,22 +226,16 @@ footer a:hover {
 }
 
 #cart-items .item-remove {
-    background-color: #ff6666;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background-color: red;
     color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 #cart-items .item-remove:hover {
-    background-color: #ff3333;
-}
-
-#cart-total {
-    font-size: 1.5em;
-    font-weight: bold;
+    background-color: darkred;
 }
 
 #cart-message {

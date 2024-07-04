@@ -4,6 +4,7 @@ function addToCart(item, price) {
     cart.push({ item, price });
     displayCart();
     document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
+    document.getElementById('cart-count').innerText = cart.length;
     setTimeout(() => {
         document.getElementById('cart-message').innerText = '';
     }, 2000);
@@ -31,10 +32,12 @@ function displayCart() {
 function removeFromCart(index) {
     cart.splice(index, 1);
     displayCart();
+    document.getElementById('cart-count').innerText = cart.length;
 }
 
 function checkout() {
     alert('Thank you for your purchase!');
     cart = [];
     displayCart();
+    document.getElementById('cart-count').innerText = 0;
 }
