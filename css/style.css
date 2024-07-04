@@ -1,4 +1,11 @@
 /* Base styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
 header {
     background-color: #333;
     color: white;
@@ -8,6 +15,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 header img {
@@ -25,6 +33,7 @@ header h1 {
 @media (max-width: 600px) {
     header {
         flex-direction: column;
+        padding: 10px;
     }
 
     header img {
@@ -37,20 +46,13 @@ header h1 {
     }
 }
 
-/* Other existing styles */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-}
-
 nav ul {
     list-style: none;
     padding: 0;
     display: flex;
     justify-content: center;
     background-color: #444;
+    margin: 0;
 }
 
 nav ul li {
