@@ -1,15 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 const app = express();
 const port = 3000;
 
-const email = process.env.EMAIL;
-const password = process.env.PASSWORD;
+// Replace these with your email credentials
+const email = 'your-email@gmail.com';
+const password = 'your-email-password';
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
