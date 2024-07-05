@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
