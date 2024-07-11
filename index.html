@@ -4,16 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cozy Corner Coffee Shop</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <header>
-    <img src="images/coffee.jpg" alt="Cozy Corner Coffee Shop Logo">
+    <img src="../images/coffee.jpg" alt="Cozy Corner Coffee Shop Logo">
     <h1>Welcome to Cozy Corner Coffee Shop</h1>
-    <div id="cart-icon">
-        <a href="#cart"><img src="images/cart.png" alt="Shopping Cart Logo" class="cart-logo">
-            <span id="cart-count">0</span></a>
-    </div>
 </header>
 <nav>
     <ul>
@@ -21,43 +17,43 @@
         <li><a href="#menu">Menu</a></li>
         <li><a href="#about">About Us</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="#cart">Shopping Cart</a></li>
+        <li><a href="#cart" id="cart-icon"><img src="../images/cart-icon.png" alt="Cart" class="cart-logo"><span id="cart-count">0</span> Shopping Cart</a></li>
     </ul>
 </nav>
 <section id="home">
     <h2>Our Coffee</h2>
-    <p>Enjoy the best coffee in town! Our coffee beans are sourced from the finest plantations around the world. </p>
+    <p>Enjoy the best coffee in town! Our coffee beans are sourced from the finest plantations around the world.</p>
 </section>
 <section id="menu">
     <h2>Menu</h2>
     <div class="menu-item">
         <div>
-            <img src="images/espresso.jpg" alt="Espresso">
+            <img src="../images/espresso.jpg" alt="Espresso">
             <p>Espresso - $3.00</p>
             <button onclick="addToCart('Espresso', 3.00)">Add to Cart</button>
         </div>
         <div>
-            <img src="images/americano.jpg" alt="Americano">
+            <img src="../images/americano.jpg" alt="Americano">
             <p>Americano - $3.50</p>
             <button onclick="addToCart('Americano', 3.50)">Add to Cart</button>
         </div>
         <div>
-            <img src="images/cappuccino.jpg" alt="Cappuccino">
+            <img src="../images/cappuccino.jpg" alt="Cappuccino">
             <p>Cappuccino - $4.00</p>
             <button onclick="addToCart('Cappuccino', 4.00)">Add to Cart</button>
         </div>
         <div>
-            <img src="images/latte.jpg" alt="Latte">
+            <img src="../images/latte.jpg" alt="Latte">
             <p>Latte - $4.50</p>
             <button onclick="addToCart('Latte', 4.50)">Add to Cart</button>
         </div>
         <div>
-            <img src="images/mocha.jpg" alt="Mocha">
+            <img src="../images/mocha.jpg" alt="Mocha">
             <p>Mocha - $5.00</p>
             <button onclick="addToCart('Mocha', 5.00)">Add to Cart</button>
         </div>
         <div>
-            <img src="images/regularcoffee.jpg" alt="Regular Coffee">
+            <img src="../images/regularcoffee.jpg" alt="Regular Coffee">
             <p>Regular Coffee - $2.00</p>
             <button onclick="addToCart('Regular Coffee', 2.00)">Add to Cart</button>
         </div>
@@ -70,7 +66,7 @@
 <section id="contact">
     <h2>Contact</h2>
     <p>Get in touch with us. We would love to hear from you!</p>
-    <form>
+    <form id="contact-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name">
         <label for="email">Email:</label>
@@ -79,19 +75,48 @@
         <textarea id="message" name="message"></textarea>
         <button type="submit">Send</button>
     </form>
+    <div id="form-message"></div>
 </section>
 <section id="cart">
     <h2>Shopping Cart</h2>
-    <div id="cart-message" style="color: green;"></div>
+    <div id="cart-message"></div>
     <div id="cart-items"></div>
     <p>Total: $<span id="cart-total">0.00</span></p>
     <button onclick="checkout()">Checkout</button>
 </section>
 <footer>
     <p>&copy; 2024 Cozy Corner Coffee Shop</p>
-    <p>Follow us: <a href="#">Facebook</a> | <a href="#">Twitter</a> | <a href="#">Instagram</a></p>
-    <p>This website is made by Tugba Apuhan in June 2024 for the course project.</p>
+    <p>
+        Follow us:
+        <a href="#">Facebook</a> |
+        <a href="#">Twitter</a> |
+        <a href="#">Instagram</a>
+    </p>
 </footer>
-<script src="js/cart.js"></script>
+<script src="../js/cart.js"></script>
+<script>
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        fetch('/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, message })
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('form-message').innerText = data;
+        })
+        .catch(error => {
+            document.getElementById('form-message').innerText = 'Error sending message';
+        });
+    });
+</script>
 </body>
 </html>
