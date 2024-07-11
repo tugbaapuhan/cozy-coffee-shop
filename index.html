@@ -69,7 +69,7 @@
 <section id="contact">
     <h2>Contact</h2>
     <p>Get in touch with us. We would love to hear from you!</p>
-    <form id="contact-form">
+    <form id="contact-form" method="POST" action="/send-email">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
         <label for="email">Email:</label>
@@ -80,6 +80,7 @@
     </form>
     <div id="form-message"></div>
 </section>
+
 <section id="cart">
     <h2>Shopping Cart</h2>
     <div id="cart-items"></div>
@@ -102,8 +103,7 @@
       e.preventDefault();
 
       const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
+      const email = document.getElementById('message').value;
 
       fetch('/send-email', {
         method: 'POST',

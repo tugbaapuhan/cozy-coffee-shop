@@ -12,6 +12,11 @@ app.use(bodyParser.json());
 // Serve static files from the root directory
 app.use(express.static(__dirname));
 
+// Serve static files from other directories
+app.use('/css', express.static(__dirname + '/css'));
+app.use('/js', express.static(__dirname + '/js'));
+app.use('/images', express.static(__dirname + '/images'));
+
 // Handle form submissions
 app.post('/send-email', (req, res) => {
   const { name, email, message } = req.body;
