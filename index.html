@@ -63,7 +63,7 @@
     </div>
 </section>
 <section id="about">
-    <h2>About Us1</h2>
+    <h2>About Us</h2>
     <p>Learn more about our story and our passion for coffee. We are dedicated to providing the best coffee experience for our customers.</p>
 </section>
 <section id="contact">
@@ -80,8 +80,6 @@
     </form>
     <div id="form-message"></div>
 </section>
-
-
 <section id="cart">
     <h2>Shopping Cart</h2>
     <div id="cart-items"></div>
@@ -104,7 +102,8 @@
       e.preventDefault();
 
       const name = document.getElementById('name').value;
-      const email = document.getElementById('message').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
 
       fetch('/send-email', {
         method: 'POST',
