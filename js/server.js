@@ -1,55 +1,50 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
+
+// Serve static files from the root directory
+app.use(express.static(path.join(__dirname, '/')));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Serve static files from the root directory
-app.use(express.static(__dirname));
-
-// Serve static files from other directories
-app.use('/css', express.static(__dirname + '/css'));
-app.use('/js', express.static(__dirname + '/js'));
-app.use('/images', express.static(__dirname + '/images'));
-
-// Handle form submissions
-app.post('/send-email', (req, res) => {
-  const { name, email, message } = req.body;
-
-  // Create a transporter
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
-
-  // Set up email data
-  const mailOptions = {
-    from: email,
-    to: process.env.EMAIL_USER,
-    subject: 'New Contact Form Submission',
-    text: `You have a new message from ${name} (${email}):\n\n${message}`,
-  };
-
-  // Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send('Error sending email');
-    } else {
-      console.log('Email sent: ' + info.response);
-      res.status(200).send('Email sent successfully');
-    }
-  });
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.post('/send-email', (req, res) => {
+    const { name, email, message } = req.body;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD,
+        },
+    });
+
+    const mailOptions = {
+        from: email,
+        to: process.env.EMAIL,
+        subject: 'Contact Form Submission',
+        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return res.status(500).send('Error sending email: ' + error.message);
+        }
+        res.status(200).send('Email sent: ' + info.response);
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
