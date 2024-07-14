@@ -99,26 +99,26 @@
 <script src="js/script.js"></script>
 <script>
     document.getElementById('contact-form').addEventListener('submit', function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
 
-        fetch('https://cozy-corner-coffee-shop-e442db943af4.herokuapp.com/send-email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, message })
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('form-message').innerText = data;
-        })
-        .catch(error => {
-            document.getElementById('form-message').innerText = 'Error sending message';
-        });
+      fetch('/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email, message })
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('form-message').innerText = data;
+      })
+      .catch(error => {
+        document.getElementById('form-message').innerText = 'Error sending message';
+      });
     });
 </script>
 </body>

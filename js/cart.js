@@ -1,12 +1,14 @@
 let cart = [];
 
 function addToCart(item, price) {
+    console.log(`Adding to cart: ${item}, Price: ${price}`);
     const existingItem = cart.find(cartItem => cartItem.item === item);
     if (existingItem) {
         existingItem.quantity++;
     } else {
         cart.push({ item, price, quantity: 1 });
     }
+    console.log('Cart:', cart);
     displayCart();
     document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
     updateCartCount();
@@ -45,6 +47,7 @@ function removeFromCart(index) {
 
 function updateCartCount() {
     const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    console.log('Cart count:', cartCount);
     document.getElementById('cart-count').innerText = cartCount;
 }
 
