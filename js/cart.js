@@ -5,13 +5,15 @@ function addToCart(item, price) {
     const existingItem = cart.find(cartItem => cartItem.item === item);
     if (existingItem) {
         existingItem.quantity++;
+        console.log(`Updated quantity for ${item}: ${existingItem.quantity}`);
     } else {
         cart.push({ item, price, quantity: 1 });
+        console.log(`Added new item to cart: ${item}, Quantity: 1`);
     }
     console.log('Cart:', cart);
     displayCart();
-    document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
     updateCartCount();
+    document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
     setTimeout(() => {
         document.getElementById('cart-message').innerText = '';
     }, 2000);
@@ -34,11 +36,14 @@ function displayCart() {
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     document.getElementById('cart-total').innerText = total.toFixed(2);
+    console.log(`Cart total: $${total.toFixed(2)}`);
 }
 
 function removeFromCart(index) {
     cart[index].quantity--;
+    console.log(`Removed one ${cart[index].item}, new quantity: ${cart[index].quantity}`);
     if (cart[index].quantity === 0) {
+        console.log(`Removed ${cart[index].item} from cart`);
         cart.splice(index, 1);
     }
     displayCart();
@@ -55,5 +60,6 @@ function checkout() {
     alert('Thank you for your purchase!');
     cart = [];
     displayCart();
-    document.getElementById('cart-count').innerText = 0;
+    updateCartCount();
+    console.log('Cart emptied after checkout');
 }
