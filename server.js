@@ -10,51 +10,70 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Session setup
-app.use(session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: true,
-}));
-
 // Serve static files
 app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'images')));
 app.use(express.static(path.join(__dirname, 'js')));
 
+// Session configuration
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Middleware to check if the user is authenticated
+function checkAuthentication(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 // Route to serve index.html
-app.get('/', (req, res) => {
+app.get('/', checkAuthentication, (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-let users = []; // This should be replaced with a proper database in production
+// Login route
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/login.html'));
+});
 
-// Registration route
+// Register route
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views/register.html'));
+});
+
+// Handle user registration
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword });
-    res.status(201).send('User registered');
+    // Save the user to the database (for simplicity, using an in-memory object)
+    users[username] = { password: hashedPassword };
+    res.redirect('/login');
 });
 
-// Login route
+// Handle user login
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = users.find(user => user.username === username);
+    const user = users[username];
     if (user && await bcrypt.compare(password, user.password)) {
-        req.session.userId = user.username;
-        res.status(200).send('Login successful');
+        req.session.user = username;
+        res.redirect('/');
     } else {
-        res.status(401).send('Invalid credentials');
+        res.redirect('/login');
     }
 });
 
-// Logout route
+// Handle user logout
 app.post('/logout', (req, res) => {
     req.session.destroy();
-    res.status(200).send('Logout successful');
+    res.redirect('/login');
 });
 
+// Route to handle email sending
 app.post('/send-email', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -74,7 +93,7 @@ app.post('/send-email', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);
-            res.status(500).send('Errorr sending email');
+            res.status(500).send('Error sending email');
         } else {
             console.log('Email sent: ' + info.response);
             res.status(200).send('Email sent');
