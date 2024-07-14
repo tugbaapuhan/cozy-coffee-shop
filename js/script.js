@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Registration successful!');
             registerForm.reset();
         } else {
-            alert('Registration failed!');
+            alert('Registration unsuccessful!');
         }
     });
 

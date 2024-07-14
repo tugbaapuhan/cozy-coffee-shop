@@ -56,7 +56,7 @@ function displayMessage(message) {
 }
 
 function checkout() {
-    alert('Thank you for your purchase!');
+    alert('Thank you very much for your purchase!');
     cart = [];
     displayCart();
     updateCartCount();
