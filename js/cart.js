@@ -1,10 +1,15 @@
 let cart = [];
 
 function addToCart(item, price) {
-    cart.push({ item, price });
+    const existingItem = cart.find(cartItem => cartItem.item === item);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ item, price, quantity: 1 });
+    }
     displayCart();
     document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
-    document.getElementById('cart-count').innerText = cart.length;
+    updateCartCount();
     setTimeout(() => {
         document.getElementById('cart-message').innerText = '';
     }, 2000);
@@ -18,21 +23,29 @@ function displayCart() {
     cart.forEach((cartItem, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
-            <span class="item-details">${cartItem.item} - $${cartItem.price.toFixed(2)}</span>
+            <span class="item-details">${cartItem.item} - $${cartItem.price.toFixed(2)} x ${cartItem.quantity}</span>
             <button class="item-remove" onclick="removeFromCart(${index})">Remove</button>
         `;
         ul.appendChild(li);
     });
     cartItems.appendChild(ul);
 
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     document.getElementById('cart-total').innerText = total.toFixed(2);
 }
 
 function removeFromCart(index) {
-    cart.splice(index, 1);
+    cart[index].quantity--;
+    if (cart[index].quantity === 0) {
+        cart.splice(index, 1);
+    }
     displayCart();
-    document.getElementById('cart-count').innerText = cart.length;
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cart-count').innerText = cartCount;
 }
 
 function checkout() {
