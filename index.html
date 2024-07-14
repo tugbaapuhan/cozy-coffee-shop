@@ -13,6 +13,7 @@
     <div id="cart-icon">
         <a href="#cart"><img src="images/cart-icon.png" alt="Cart Icon"><span id="cart-count">0</span></a>
     </div>
+
 </header>
 <nav>
     <ul>
@@ -28,6 +29,7 @@
     <p>Enjoy the best coffee in town! Our coffee beans are sourced from the finest plantations around the world.</p>
 </section>
 <section id="menu">
+    <div id="cart-message" class="message"></div> <!-- Added message container here -->
     <h2>Menu</h2>
     <div class="menu-item">
         <div>
@@ -85,6 +87,7 @@
     <div id="cart-items"></div>
     <p>Total: $<span id="cart-total">0.00</span></p>
     <button onclick="checkout()">Checkout</button>
+    <div id="cart-message"></div>
 </section>
 <footer>
     <p>&copy; 2024 Cozy Corner Coffee Shop</p>
@@ -120,6 +123,6 @@
         document.getElementById('form-message').innerText = 'Error sending message';
       });
     });
-</script>
+  </script>
 </body>
 </html>

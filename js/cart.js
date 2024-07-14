@@ -1,22 +1,15 @@
 let cart = [];
 
 function addToCart(item, price) {
-    console.log(`Adding to cart: ${item}, Price: ${price}`);
     const existingItem = cart.find(cartItem => cartItem.item === item);
     if (existingItem) {
         existingItem.quantity++;
-        console.log(`Updated quantity for ${item}: ${existingItem.quantity}`);
     } else {
         cart.push({ item, price, quantity: 1 });
-        console.log(`Added new item to cart: ${item}, Quantity: 1`);
     }
-    console.log('Cart:', cart);
     displayCart();
     updateCartCount();
-    document.getElementById('cart-message').innerText = `${item} was added to your cart!`;
-    setTimeout(() => {
-        document.getElementById('cart-message').innerText = '';
-    }, 2000);
+    displayMessage(`${item} was added to your cart!`);
 }
 
 function displayCart() {
@@ -36,24 +29,30 @@ function displayCart() {
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     document.getElementById('cart-total').innerText = total.toFixed(2);
-    console.log(`Cart total: $${total.toFixed(2)}`);
 }
 
 function removeFromCart(index) {
+    const item = cart[index].item;
     cart[index].quantity--;
-    console.log(`Removed one ${cart[index].item}, new quantity: ${cart[index].quantity}`);
     if (cart[index].quantity === 0) {
-        console.log(`Removed ${cart[index].item} from cart`);
         cart.splice(index, 1);
     }
     displayCart();
     updateCartCount();
+    displayMessage(`Removed one ${item} from cart`);
 }
 
 function updateCartCount() {
     const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    console.log('Cart count:', cartCount);
     document.getElementById('cart-count').innerText = cartCount;
+}
+
+function displayMessage(message) {
+    const messageElement = document.getElementById('cart-message');
+    messageElement.innerText = message;
+    setTimeout(() => {
+        messageElement.innerText = '';
+    }, 2000);
 }
 
 function checkout() {
@@ -61,5 +60,4 @@ function checkout() {
     cart = [];
     displayCart();
     updateCartCount();
-    console.log('Cart emptied after checkout');
 }
