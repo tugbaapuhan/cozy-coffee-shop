@@ -4,6 +4,8 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
+const cors = require('cors'); // Import cors package
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -15,6 +17,9 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+// CORS configuration
+app.use(cors({ origin: 'https://tugbaapuhan.github.io' }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'css')));
@@ -38,9 +43,12 @@ app.post('/register', (req, res) => {
         res.status(400).send('User already exists!');
     } else {
         bcrypt.hash(password, 10, (err, hash) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal server error');
+            }
             users.push({ username, password: hash });
-            res.status(200).send('Registration failed!');
+            res.status(201).send('Registration successful!');
         });
     }
 });
@@ -52,7 +60,10 @@ app.post('/login', (req, res) => {
 
     if (user) {
         bcrypt.compare(password, user.password, (err, result) => {
-            if (err) throw err;
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Internal server error');
+            }
             if (result) {
                 req.session.user = user;
                 res.status(200).send('Login successful!');
@@ -84,7 +95,7 @@ app.post('/send-email', (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
+            console.error(error);
             res.status(500).send('Error sending email');
         } else {
             console.log('Email sent: ' + info.response);
