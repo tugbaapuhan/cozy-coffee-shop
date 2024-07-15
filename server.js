@@ -17,11 +17,13 @@ app.use(session({
 }));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'public'))); // Make sure your CSS and JS files are in the 'public' directory
+app.use(express.static(path.join(__dirname, 'css')));
+app.use(express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, 'js')));
 
 // Route to serve index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // User database simulation
