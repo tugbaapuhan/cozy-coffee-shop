@@ -7,6 +7,8 @@ const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 3000;
 
+let users = {}; // For simplicity, using an in-memory object to store users
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -33,7 +35,7 @@ function checkAuthentication(req, res, next) {
 
 // Route to serve index.html
 app.get('/', checkAuthentication, (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
 // Login route
@@ -49,10 +51,13 @@ app.get('/register', (req, res) => {
 // Handle user registration
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
+    if (users[username]) {
+        return res.status(400).send('User already exists');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     // Save the user to the database (for simplicity, using an in-memory object)
     users[username] = { password: hashedPassword };
-    res.redirect('/login');
+    res.status(201).send('Registration successful!');
 });
 
 // Handle user login
