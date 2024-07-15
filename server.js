@@ -40,7 +40,7 @@ app.post('/register', (req, res) => {
         bcrypt.hash(password, 10, (err, hash) => {
             if (err) throw err;
             users.push({ username, password: hash });
-            res.status(200).send('Registration successful!');
+            res.status(200).send('Registration failed!');
         });
     }
 });
