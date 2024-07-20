@@ -33,19 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle login form submission
-    document.getElementById('register-form').addEventListener('submit', async (event) => {
-      event.preventDefault();
+    ddocument.getElementById('loginForm').addEventListener('submit', async (e) => {
+         e.preventDefault();
+         const username = document.getElementById('loginUsername').value;
+         const password = document.getElementById('loginPassword').value;
 
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
+         const response = await fetch('https://cozy-corner-coffee-shop.herokuapp.com/login', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ username, password })
+         });
 
-      const response = await fetch('https://tugbaapuhan.github.io/cozy-coffee-shop/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+         const result = await response.json();
+         alert(result.message);
+     });
+
 
       if (response.ok) {
         alert('Registration successful!');

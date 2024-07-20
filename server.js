@@ -4,22 +4,19 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
-const cors = require('cors'); // Import cors package
-
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors()); // Add CORS middleware
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true
 }));
-
-// CORS configuration
-app.use(cors({ origin: 'https://tugbaapuhan.github.io' }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'css')));
@@ -40,15 +37,12 @@ app.post('/register', (req, res) => {
     const userExists = users.find(user => user.username === username);
 
     if (userExists) {
-        res.status(400).send('User already exists!');
+        res.status(400).json({ message: 'User already exists!' });
     } else {
         bcrypt.hash(password, 10, (err, hash) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).send('Internal server error');
-            }
+            if (err) throw err;
             users.push({ username, password: hash });
-            res.status(201).send('Registration successful!');
+            res.status(200).json({ message: 'Registration successful!' });
         });
     }
 });
@@ -60,19 +54,16 @@ app.post('/login', (req, res) => {
 
     if (user) {
         bcrypt.compare(password, user.password, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).send('Internal server error');
-            }
+            if (err) throw err;
             if (result) {
                 req.session.user = user;
-                res.status(200).send('Login successful!');
+                res.status(200).json({ message: 'Login successful!' });
             } else {
-                res.status(400).send('Invalid password!');
+                res.status(400).json({ message: 'Invalid password!' });
             }
         });
     } else {
-        res.status(400).send('User not found!');
+        res.status(400).json({ message: 'User not found!' });
     }
 });
 
@@ -95,7 +86,7 @@ app.post('/send-email', (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.error(error);
+            console.log(error);
             res.status(500).send('Error sending email');
         } else {
             console.log('Email sent: ' + info.response);
