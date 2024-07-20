@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors()); // Add CORS middleware
+app.use(cors());
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -19,9 +19,7 @@ app.use(session({
 }));
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'css')));
-app.use(express.static(path.join(__dirname, 'images')));
-app.use(express.static(path.join(__dirname, 'js')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to serve index.html
 app.get('/', (req, res) => {
